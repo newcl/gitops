@@ -5,8 +5,14 @@ namespace: argocd
 
 resources:
   - ../../base
+  - ingress.yaml
+
+patches:
+  - path: argocd-cmd-params-cm-patch.yaml
 
 # Labels for dev environment
 labels:
   - pairs:
       environment: dev 
+
+      

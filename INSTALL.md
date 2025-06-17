@@ -1,77 +1,87 @@
-# Installing ArgoCD
+# Installation Guide
 
-This guide provides instructions for installing ArgoCD using either kubectl or Helm.
+## ArgoCD Installation
 
-## Prerequisites
+ArgoCD is installed using GitOps practices with Kustomize. The installation is managed through the following directory structure:
 
-- A running Kubernetes cluster
-- kubectl configured to communicate with your cluster
-- (Optional) Helm 3.x if using Helm installation method
-
-## Method 1: Install using kubectl (Recommended)
-
-1. Create the ArgoCD namespace:
-```bash
-kubectl create namespace argocd
+```
+apps/argocd/
+├── base/              # Base ArgoCD installation
+│   ├── install.yaml   # Official ArgoCD manifest
+│   └── kustomization.yaml
+└── overlays/
+    └── dev/          # Development environment specific configurations
+        ├── ingress.yaml
+        └── kustomization.yaml
 ```
 
-2. Apply the ArgoCD installation manifests:
+### Prerequisites
+
+- Kubernetes cluster
+- kubectl configured to access the cluster
+- kustomize installed
+
+### Installation Steps
+
+1. Apply the ArgoCD installation using kustomize:
+
 ```bash
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -k apps/argocd/overlays/dev
 ```
 
-3. Wait for all pods to be running:
+2. Wait for all ArgoCD pods to be running:
+
 ```bash
 kubectl get pods -n argocd -w
 ```
 
-4. Get the ArgoCD admin password:
+3. Access ArgoCD UI:
+   - URL: http://argo.elladali.com
+   - Note: HTTPS is handled by Cloudflare
+
+### Default Credentials
+
+The default admin password is stored in a Kubernetes secret. To retrieve it:
+
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
-5. Port-forward the ArgoCD server:
+### Security Note
+
+- ArgoCD is configured to use HTTP only, as HTTPS termination is handled by Cloudflare
+- The admin password should be changed after first login
+- Consider implementing additional security measures as needed
+
+### Updating ArgoCD
+
+To update ArgoCD to a new version:
+
+1. Update the version in the base/install.yaml file
+2. Apply the changes:
+
 ```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
+kubectl apply -k apps/argocd/overlays/dev
 ```
 
-6. Access the ArgoCD UI:
-   - Open your browser and navigate to https://localhost:8080
-   - Login with:
-     - Username: admin
-     - Password: (the password from step 4)
+### Troubleshooting
 
-## Method 2: Install using Helm
+If you encounter any issues:
 
-1. Add the Argo Helm repository:
+1. Check the ArgoCD pods status:
 ```bash
-helm repo add argo https://argoproj.github.io/argo-helm
-helm repo update
+kubectl get pods -n argocd
 ```
 
-2. Install ArgoCD:
+2. Check the ArgoCD server logs:
 ```bash
-helm install argocd argo/argo-cd \
-  --namespace argocd \
-  --create-namespace \
-  --set server.extraArgs="{--insecure}" \
-  --set server.service.type=LoadBalancer
+kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server
 ```
 
-3. Get the ArgoCD admin password:
+3. Verify the ingress configuration:
 ```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+kubectl get ingress -n argocd
 ```
-
-4. Access the ArgoCD UI:
-   - If using LoadBalancer, get the external IP:
-     ```bash
-     kubectl get svc -n argocd argocd-server
-     ```
-   - Open your browser and navigate to https://<EXTERNAL-IP>
-   - Login with:
-     - Username: admin
-     - Password: (the password from step 3)
 
 ## Post-Installation Steps
 
@@ -94,23 +104,6 @@ brew install argocd
 3. Login to ArgoCD using CLI:
 ```bash
 argocd login <ARGOCD_SERVER> --username admin --password <PASSWORD>
-```
-
-## Troubleshooting
-
-1. If pods are not starting, check the events:
-```bash
-kubectl get events -n argocd
-```
-
-2. Check pod logs:
-```bash
-kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server
-```
-
-3. If you can't access the UI, verify the service:
-```bash
-kubectl get svc -n argocd argocd-server
 ```
 
 ## Security Considerations
