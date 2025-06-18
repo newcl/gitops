@@ -1,12 +1,10 @@
-# argocd-server-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server-ingress
   namespace: argocd
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
     - host: argo.elladali.com
@@ -19,6 +17,10 @@ spec:
                 name: argocd-server
                 port:
                   number: 80
-  tls:
-    - hosts:
-        - argo.elladali.com
+          - path: /fallback
+            pathType: Prefix
+            backend:
+              service:
+                name: fallback-service
+                port:
+                  number: 80

@@ -1,0 +1,9 @@
+tunnel: myk3s-tunnel
+credentials-file: /etc/cloudflared/9cc8fa7f-5ace-4b7a-8e5d-a1113873972e.json
+
+ingress:
+  - hostname: argo.elladali.com
+    service: http://localhost:80
+  - hostname: mytube.elladali.com
+    service: http://localhost:80
+  - service: http_status:404 
