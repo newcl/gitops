@@ -7,8 +7,12 @@ metadata:
     kubernetes.io/ingress.class: traefik
     # traefik.ingress.kubernetes.io/router.middlewares: argocd-argocd-headers@kubernetescrd
     traefik.ingress.kubernetes.io/forwardedHeaders: "true"
-    traefik.ingress.kubernetes.io/ssl-redirect: "true"
-    traefik.ingress.kubernetes.io/protocol: "https"
+    # ssl-redirect: "true": Tells Traefik to redirect HTTP to HTTPS. In your case, you probably do NOT want this, since Cloudflare already handles HTTPS and your internal traffic is HTTP.
+    # traefik.ingress.kubernetes.io/ssl-redirect: "true"
+
+
+    # protocol: "https": Tells Traefik to use HTTPS to talk to the backend. You do NOT want this if Argo CD is only running HTTP.
+    # traefik.ingress.kubernetes.io/protocol: "https"
 spec:
   rules:
     - host: argo.elladali.com
