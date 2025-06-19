@@ -1,0 +1,8 @@
+mode: standalone
+rootUser: "minio-y9EYezIG"
+rootPassword: "Nj4uHd53lz32Gc8D9uA"
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: "local-path"
+resources: {}
