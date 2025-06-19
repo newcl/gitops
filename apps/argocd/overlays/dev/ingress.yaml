@@ -17,10 +17,3 @@ spec:
                 name: argocd-server
                 port:
                   number: 80
-          - path: /fallback
-            pathType: Prefix
-            backend:
-              service:
-                name: fallback-service
-                port:
-                  number: 80
