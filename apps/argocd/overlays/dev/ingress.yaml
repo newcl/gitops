@@ -5,6 +5,10 @@ metadata:
   namespace: argocd
   annotations:
     kubernetes.io/ingress.class: traefik
+    # traefik.ingress.kubernetes.io/router.middlewares: argocd-argocd-headers@kubernetescrd
+    traefik.ingress.kubernetes.io/forwardedHeaders: "true"
+    traefik.ingress.kubernetes.io/ssl-redirect: "true"
+    traefik.ingress.kubernetes.io/protocol: "https"
 spec:
   rules:
     - host: argo.elladali.com
