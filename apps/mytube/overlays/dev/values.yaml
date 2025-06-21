@@ -23,7 +23,7 @@ minio:
 
 frontend:
   image:
-    tag: "738dbf25"
+    tag: "test-123"
 
 # huey:
 #   image:
