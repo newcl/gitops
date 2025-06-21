@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mytube
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/newcl/mytube.git
+    targetRevision: main
+    path: k8s/mytube
+    helm:
+      valueFiles:
+        - values.yaml
+      values: |
+        namespace: mytube
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mytube
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true 

@@ -1,0 +1,30 @@
+# Dev environment overrides
+global:
+  namespace: mytube-dev
+  imagePullSecrets:
+    - name: ghcr-secret
+
+# Override release name to match secret names
+nameOverride: "mytube-dev"
+fullnameOverride: "mytube-dev"
+
+replicaCount: 1
+
+# MinIO configuration
+minio:
+  endpoint: "minio.elladali.com"
+  accessKey: "P4rtBZM0eFIZzJ9wIWnm"
+  secretKey: "TCKLZxAM4aTBIPZtALWUo6xzkM6Tx1afj18ILhCo"
+  bucket: "mytube"
+
+# fastapi:
+#   image:
+#     tag: "v1.2.3"  # or "latest" or commit SHA
+
+frontend:
+  image:
+    tag: "738dbf25"
+
+# huey:
+#   image:
+#     tag: "v1.2.3"

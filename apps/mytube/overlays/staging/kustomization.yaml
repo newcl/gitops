@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: mytube-staging
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+patches:
+  - target:
+      kind: Application
+      name: mytube
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: mytube-staging
+      - op: replace
+        path: /spec/destination/namespace
+        value: mytube-staging 

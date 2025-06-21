@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+patches:
+  - target:
+      kind: Application
+      name: mytube
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: mytube-dev
+      - op: replace
+        path: /metadata/namespace
+        value: argocd
+      - op: replace
+        path: /spec/destination/namespace
+        value: mytube-dev
+      - op: replace
+        path: /spec/source/helm/valueFiles
+        value:
+          - values.yaml
+      - op: add
+        path: /spec/source/helm/values
+        value: |
+          global:
+            namespace: mytube-dev
+            imagePullSecrets:
+              - name: ghcr-secret
+          minio:
+            endpoint: "minio.elladali.com"
+            accessKey: "P4rtBZM0eFIZzJ9wIWnm"
+            secretKey: "TCKLZxAM4aTBIPZtALWUo6xzkM6Tx1afj18ILhCo"
+            bucket: "mytube" 
