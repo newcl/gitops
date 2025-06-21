@@ -3,6 +3,7 @@ global:
   namespace: mytube-dev
   imagePullSecrets:
     - name: ghcr-secret
+  storageClass: "local-path"
 
 # Override release name to match secret names
 nameOverride: "mytube-dev"
@@ -23,7 +24,7 @@ minio:
 
 frontend:
   image:
-    tag: "test-123"
+    tag: "738dbf25"
 
 # huey:
 #   image:
