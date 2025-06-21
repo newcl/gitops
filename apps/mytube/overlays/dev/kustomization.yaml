@@ -30,6 +30,10 @@ patches:
             namespace: mytube-dev
             imagePullSecrets:
               - name: ghcr-secret
+          # Update this tag when you want to deploy a new frontend image
+          frontend:
+            image:
+              tag: "738dbf25"
           minio:
             endpoint: "minio.elladali.com"
             accessKey: "P4rtBZM0eFIZzJ9wIWnm"
