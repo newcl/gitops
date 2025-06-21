@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drone
+  namespace: drone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drone
+  template:
+    metadata:
+      labels:
+        app: drone
+    spec:
+      containers:
+        - name: drone
+          image: drone/drone:2
+          ports:
+            - containerPort: 80
+          env:
+            - name: DRONE_SERVER_HOST
+              value: "drone.elladali.com"
+            - name: DRONE_SERVER_PROTO
+              value: "http"
+            - name: DRONE_SERVER_PROTO_OVERRIDE
+              value: "https"
+            - name: DRONE_GITHUB_CLIENT_ID
+              value: "Ov23lisMAulfXNtc2VPl"
+            - name: DRONE_GITHUB_CLIENT_SECRET
+              value: "63290f5fa28c237958a7cee73f1653b25889a76d"
+            - name: DRONE_RPC_SECRET
+              value: "thisissupergoodsecret"
+            - name: DRONE_USER_CREATE
+              value: "username:<your_github_username>,admin:true"
+            - name: DRONE_DATABASE_DATASOURCE
+              value: "/data/drone.sqlite"
+            - name: DRONE_DATABASE_DRIVER
+              value: "sqlite3"
+          volumeMounts:
+            - name: drone-data
+              mountPath: /data
+      volumes:
+        - name: drone-data
+          persistentVolumeClaim:
+            claimName: drone-pvc 
