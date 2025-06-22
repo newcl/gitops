@@ -22,9 +22,9 @@ minio:
 #   image:
 #     tag: "v1.2.3"  # or "latest" or commit SHA
 
-frontend:
-  image:
-    tag: "738dbf25"
+# frontend:
+#   image:
+#     tag: "738dbf25"
 
 # huey:
 #   image:
