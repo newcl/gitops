@@ -1,0 +1,4 @@
+resources:
+  - namespace.yaml
+  - strimzi-operator.yaml
+  - kafka-cluster.yaml 
