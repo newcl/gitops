@@ -552,7 +552,7 @@ spec:
               value: "public"
           resources:
             requests:
-              memory: 16Gi
+              memory: 1Gi
           securityContext: 
             readOnlyRootFilesystem: false      
       volumes:
