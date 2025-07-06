@@ -1,0 +1,43 @@
+# MongoDB Configuration Values
+# These values are used to generate the Kubernetes manifests
+
+# Authentication
+auth:
+  rootPassword: "MongoDB123!"
+  username: "mongodb"
+  password: "MongoDB123!"
+  database: "appdb"
+
+# Storage
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: "local-path"
+
+# Resources
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 250m
+  limits:
+    memory: 1Gi
+    cpu: 500m
+
+# Service
+service:
+  type: ClusterIP
+  port: 27017
+
+# Ingress
+ingress:
+  enabled: true
+  host: "mongodb.elladali.com"
+
+# Security
+security:
+  authorization: enabled
+  tls: false  # Enable for production
+
+# Monitoring
+metrics:
+  enabled: false 
