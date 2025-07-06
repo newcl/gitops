@@ -6,12 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    chart: kube-prometheus-stack
-    targetRevision: 58.2.1 # or latest stable version
-    helm:
-      valueFiles:
-        - values.yaml
+    repoURL: https://github.com/newcl/gitops.git
+    targetRevision: main
+    path: apps/monitoring/base
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
