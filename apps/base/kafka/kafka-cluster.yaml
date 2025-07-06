@@ -57,3 +57,18 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
+
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: my-first-topic
+  namespace: kafka
+  labels:
+    # This label tells Strimzi which cluster this topic belongs to
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 1
+
