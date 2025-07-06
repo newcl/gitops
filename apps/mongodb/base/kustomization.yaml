@@ -2,4 +2,4 @@ resources:
   - namespace.yaml
   - mongodb.yaml
   - ingress.yaml
-  - argocd-app.yaml 
+  # - argocd-app.yaml 
