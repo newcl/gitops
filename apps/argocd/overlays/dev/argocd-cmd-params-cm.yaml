@@ -12,3 +12,11 @@ data:
   # server.rootpath: "/"
   # server.basehref: "/"
   # server.enable.proxy.extension: "true"
+  resource.exclusions: |
+    - apiGroups:
+      - "*"
+      kinds:
+      # - Endpoints  <-- This line being commented out is key
+      - EndpointSlice
+      clusters:
+      - "*"
