@@ -37,8 +37,8 @@ data:
     # mongod.conf
     storage:
       dbPath: /data/db
-      journal:
-        enabled: true
+      # journal:
+      #   enabled: true
     systemLog:
       destination: file
       logAppend: true
