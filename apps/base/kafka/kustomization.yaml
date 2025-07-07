@@ -1,4 +1,10 @@
 resources:
   - namespace.yaml
   - strimzi-cluster-operator-install.yaml
-  - kafka-cluster.yaml 
+  - kafka-cluster.yaml
+
+# Wait for CRDs to be ready before applying Kafka cluster
+waitOptions:
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: kafkas.kafka.strimzi.io 
