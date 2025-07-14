@@ -1,0 +1,174 @@
+# Immich Helm Values
+# Configured for external PostgreSQL and persistent storage
+
+# Global settings
+global:
+  postgresql:
+    enabled: false  # Use external PostgreSQL
+  redis:
+    enabled: true
+    auth:
+      enabled: false
+
+# PostgreSQL external configuration
+externalDatabase:
+  type: postgresql
+  host: "your-postgres-host"  # Replace with your PostgreSQL host
+  port: 5432
+  database: "immich"
+  username: "immich"
+  password: "your-password"   # Replace with your actual password
+
+# Redis configuration
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+# Immich server configuration
+server:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/immich-app/immich-server
+    tag: "release"
+    pullPolicy: IfNotPresent
+  env:
+    - name: NODE_ENV
+      value: "production"
+    - name: DATABASE_URL
+      value: "postgresql://immich:your-password@your-postgres-host:5432/immich"
+    - name: REDIS_HOSTNAME
+      value: "immich-redis-master"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: REDIS_DBINDEX
+      value: "0"
+    - name: UPLOAD_LOCATION
+      value: "/usr/src/app/upload"
+    - name: THUMBNAIL_LOCATION
+      value: "/usr/src/app/thumbnail"
+    - name: LIBRARY_LOCATION
+      value: "/usr/src/app/library"
+    - name: MACHINE_LEARNING_URL
+      value: "http://immich-machine-learning:3001"
+    - name: MICROSERVICES_URL
+      value: "http://immich-microservices:3002"
+  persistence:
+    enabled: true
+    storageClass: "longhorn"  # Adjust based on your storage class
+    size: 100Gi
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+# Immich microservices
+microservices:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/immich-app/immich-microservices
+    tag: "release"
+    pullPolicy: IfNotPresent
+  env:
+    - name: NODE_ENV
+      value: "production"
+    - name: DATABASE_URL
+      value: "postgresql://immich:your-password@your-postgres-host:5432/immich"
+    - name: REDIS_HOSTNAME
+      value: "immich-redis-master"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: REDIS_DBINDEX
+      value: "0"
+    - name: UPLOAD_LOCATION
+      value: "/usr/src/app/upload"
+    - name: THUMBNAIL_LOCATION
+      value: "/usr/src/app/thumbnail"
+    - name: LIBRARY_LOCATION
+      value: "/usr/src/app/library"
+  persistence:
+    enabled: true
+    storageClass: "longhorn"
+    size: 100Gi
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+# Machine learning service
+machineLearning:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/immich-app/immich-machine-learning
+    tag: "release"
+    pullPolicy: IfNotPresent
+  env:
+    - name: NODE_ENV
+      value: "production"
+    - name: DATABASE_URL
+      value: "postgresql://immich:your-password@your-postgres-host:5432/immich"
+    - name: REDIS_HOSTNAME
+      value: "immich-redis-master"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: REDIS_DBINDEX
+      value: "0"
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+
+# Web interface
+web:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/immich-app/immich-web
+    tag: "release"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  hosts:
+    - host: "immich.your-domain.com"  # Replace with your domain
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: "immich-tls"
+      hosts:
+        - "immich.your-domain.com"
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 3001 
