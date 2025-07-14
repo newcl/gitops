@@ -5,6 +5,8 @@ namespace: immich
 
 resources:
   - namespace.yaml
+  - pv-library.yaml
+  - pvc-library.yaml
 
 helmCharts:
   - name: immich
@@ -23,11 +25,28 @@ helmCharts:
         database: "photos"
         username: "photos"
         password: "123456"
-      ingress:
+      env:
+        DB_HOSTNAME: "192.168.1.50"
+        DB_USERNAME: "photos"
+        DB_DATABASE_NAME: "photos"
+        DB_PASSWORD: "123456"
+        DATABASE_URL: "postgresql://photos:123456@192.168.1.50:5432/photos"
+      redis:
         enabled: true
-        className: "nginx"
-        hosts:
-          - host: "photos.elladali.com"
-            paths:
-              - path: /
-                pathType: Prefix 
+        architecture: standalone
+        auth:
+          enabled: false
+      immich:
+        persistence:
+          library:
+            existingClaim: immich-library
+      proxy:
+        ingress:
+          main:
+            enabled: true
+            className: "nginx"
+            hosts:
+              - host: "photos.elladali.com"
+                paths:
+                  - path: /
+                    pathType: Prefix 

@@ -1,6 +1,20 @@
 # Immich Helm Values
 # Configured for external PostgreSQL and persistent storage
 
+# Immich persistence configuration
+immich:
+  persistence:
+    library:
+      existingClaim: immich-library
+
+# Environment variables for external database
+env:
+  DB_HOSTNAME: "192.168.1.50"
+  DB_USERNAME: "photos"
+  DB_DATABASE_NAME: "photos"
+  DB_PASSWORD: "123456"
+  DATABASE_URL: "postgresql://photos:123456@192.168.1.50:5432/photos"
+
 # Global settings
 global:
   postgresql:
@@ -13,15 +27,16 @@ global:
 # PostgreSQL external configuration
 externalDatabase:
   type: postgresql
-  host: "your-postgres-host"  # Replace with your PostgreSQL host
+  host: "192.168.1.50"  # Replace with your PostgreSQL host
   port: 5432
-  database: "immich"
-  username: "immich"
-  password: "your-password"   # Replace with your actual password
+  database: "photos"
+  username: "photos"
+  password: "123456"   # Replace with your actual password
 
 # Redis configuration
 redis:
   enabled: true
+  architecture: standalone
   auth:
     enabled: false
   master:
@@ -41,7 +56,7 @@ server:
     - name: NODE_ENV
       value: "production"
     - name: DATABASE_URL
-      value: "postgresql://immich:your-password@your-postgres-host:5432/immich"
+      value: "postgresql://photos:123456@192.168.1.50:5432/photos"
     - name: REDIS_HOSTNAME
       value: "immich-redis-master"
     - name: REDIS_PORT
@@ -60,7 +75,7 @@ server:
       value: "http://immich-microservices:3002"
   persistence:
     enabled: true
-    storageClass: "longhorn"  # Adjust based on your storage class
+    storageClass: "local-path"  # Adjust based on your storage class
     size: 100Gi
   resources:
     requests:
@@ -82,7 +97,7 @@ microservices:
     - name: NODE_ENV
       value: "production"
     - name: DATABASE_URL
-      value: "postgresql://immich:your-password@your-postgres-host:5432/immich"
+      value: "postgresql://photos:123456@192.168.1.50:5432/photos"
     - name: REDIS_HOSTNAME
       value: "immich-redis-master"
     - name: REDIS_PORT
@@ -97,7 +112,7 @@ microservices:
       value: "/usr/src/app/library"
   persistence:
     enabled: true
-    storageClass: "longhorn"
+    storageClass: "local-path"
     size: 100Gi
   resources:
     requests:
@@ -150,23 +165,24 @@ web:
       memory: "256Mi"
       cpu: "200m"
 
-# Ingress configuration
-ingress:
-  enabled: true
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-  hosts:
-    - host: "immich.your-domain.com"  # Replace with your domain
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: "immich-tls"
+proxy:
+  ingress:
+    main:
+      enabled: true
+      className: "nginx"
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
       hosts:
-        - "immich.your-domain.com"
+        - host: "photos.elladali.com"
+          paths:
+            - path: /
+              pathType: Prefix
+  # tls:
+  #   - secretName: "immich-tls"
+  #     hosts:
+  #       - "immich.your-domain.com"
 
 # Service configuration
 service:

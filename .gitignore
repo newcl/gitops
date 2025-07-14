@@ -1,0 +1,47 @@
+# Helm chart downloads and build artifacts
+apps/*/base/charts/
+apps/*/overlays/*/charts/
+
+# Kubernetes secrets and sensitive files
+*-secret.yaml
+*-secrets.yaml
+secret-*.yaml
+secrets-*.yaml
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+logs/
+
+# Node modules (if any)
+node_modules/
+
+# Python cache (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Terraform (if any)
+*.tfstate
+*.tfstate.*
+.terraform/ 
