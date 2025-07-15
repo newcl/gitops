@@ -31,6 +31,7 @@ helmCharts:
         DB_DATABASE_NAME: "photos"
         DB_PASSWORD: "123456"
         DATABASE_URL: "postgresql://photos:123456@192.168.1.50:5432/photos"
+        UPLOAD_LOCATION: "/usr/src/app/upload"
       redis:
         enabled: true
         architecture: standalone

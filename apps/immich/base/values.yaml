@@ -14,6 +14,7 @@ env:
   DB_DATABASE_NAME: "photos"
   DB_PASSWORD: "123456"
   DATABASE_URL: "postgresql://photos:123456@192.168.1.50:5432/photos"
+  UPLOAD_LOCATION: "/usr/src/app/upload"
 
 # Global settings
 global:
@@ -73,6 +74,7 @@ server:
       value: "http://immich-machine-learning:3001"
     - name: MICROSERVICES_URL
       value: "http://immich-microservices:3002"
+
   persistence:
     enabled: true
     storageClass: "local-path"  # Adjust based on your storage class
@@ -110,6 +112,7 @@ microservices:
       value: "/usr/src/app/thumbnail"
     - name: LIBRARY_LOCATION
       value: "/usr/src/app/library"
+
   persistence:
     enabled: true
     storageClass: "local-path"

@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+  namespace: immich
+spec:
+  template:
+    spec:
+      volumes:
+        - name: library-volume
+          persistentVolumeClaim:
+            claimName: immich-library
+      containers:
+        - name: immich-server
+          volumeMounts:
+            - name: library-volume
+              mountPath: /usr/src/app/library
