@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: photoprism
+  namespace: photoprism
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: photoprism
+  template:
+    metadata:
+      labels:
+        app: photoprism
+    spec:
+      containers:
+        - name: photoprism
+          image: photoprism/photoprism:latest
+          ports:
+            - containerPort: 2342
+          env:
+            - name: PHOTOPRISM_ADMIN_PASSWORD
+              value: "changeme"
+            - name: PHOTOPRISM_ORIGINALS_PATH
+              value: "/photoprism/originals"
+            - name: PHOTOPRISM_SITE_URL
+              value: "https://photos.elladali.com"
+            - name: PHOTOPRISM_PUBLIC
+              value: "true"
+            - name: PHOTOPRISM_READONLY
+              value: "true"
+          volumeMounts:
+            - name: photos
+              mountPath: /photoprism/originals
+            - name: storage
+              mountPath: /photoprism/storage
+      volumes:
+        - name: photos
+          persistentVolumeClaim:
+            claimName: photoprism-photos
+        - name: storage
+          persistentVolumeClaim:
+            claimName: photoprism-storage 
