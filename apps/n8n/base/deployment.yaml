@@ -29,10 +29,12 @@ spec:
               value: "America/Vancouver"
             - name: N8N_HOST
               value: "n.elladali.com"
-            - name: N8N_PORT
-              value: "5678"
-            - name: N8N_PROTOCOL
-              value: "https"
+            # - name: N8N_PORT
+            #   value: "5678"
+            # - name: N8N_PROTOCOL
+            #   value: "https"
+            - name: N8N_WEBHOOK_URL
+              value: "https://n.elladali.com"
       volumes:
         - name: n8n-data
           hostPath:
