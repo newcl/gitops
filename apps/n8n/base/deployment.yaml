@@ -33,6 +33,8 @@ spec:
             #   value: "5678"
             # - name: N8N_PROTOCOL
             #   value: "https"
+            - name: WEBHOOK_URL
+              value: "https://n.elladali.com"
             - name: N8N_WEBHOOK_URL
               value: "https://n.elladali.com"
       volumes:
