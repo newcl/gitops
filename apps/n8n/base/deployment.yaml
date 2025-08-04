@@ -34,9 +34,9 @@ spec:
             # - name: N8N_PROTOCOL
             #   value: "https"
             - name: WEBHOOK_URL
-              value: "https://n.elladali.com"
+              value: "https://n8n-webhook.elladali.com"
             - name: N8N_WEBHOOK_URL
-              value: "https://n.elladali.com"
+              value: "https://n8n-webhook.elladali.com"
       volumes:
         - name: n8n-data
           hostPath:
